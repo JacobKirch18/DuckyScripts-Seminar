@@ -1,0 +1,9 @@
+REM This script uses the windows run dialog to display a malicious Microsoft Login page
+REM Purely for demonstration purposes, does not capture any credentials
+REM Used in tandem with fakeMicrosoftLogin.html (in same repo)
+
+DELAY 1000
+GUI r
+DELAY 500
+STRING file:///C:/Users/jacob/OneDrive/Documents/fakeMicrosoftLogin.html
+ENTER

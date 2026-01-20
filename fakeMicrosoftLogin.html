@@ -1,0 +1,247 @@
+<!--
+
+COMPUTER SEMINAR DEMO - FAKE MICROSOFT LOGIN PAGE
+- This is a fake Microsoft login page created for educational demonstration purposes only.
+- css and javascript are not stored in separate files for simplicity of demonstration.
+
+- DuckyScript executed
+    DELAY 1000
+    GUI r
+    DELAY 500
+    STRING file:///C:/Users/jacob/OneDrive/Documents/fakeMicrosoftLogin.html
+    ENTER
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signed out</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(
+                ellipse at top left,
+                #f3f4f6,
+                #eef2f7 40%,
+                #e5e7eb
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: 380px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            padding: 32px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .logo-box {
+            display: grid;
+            grid-template-columns: repeat(2, 10px);
+            grid-template-rows: repeat(2, 10px);
+            gap: 2px;
+        }
+
+        .logo-box span {
+            width: 10px;
+            height: 10px;
+        }
+
+        .red { background: #f25022; }
+        .green { background: #7fba00; }
+        .blue { background: #00a4ef; }
+        .yellow { background: #ffb900; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #5f6368;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 8px;
+            font-size: 15px;
+            border: none;
+            border-bottom: 1px solid #8a8a8a;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        input:focus {
+            border-bottom: 2px solid #2563eb;
+        }
+
+        .button {
+            width: 100%;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            font-size: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .button:hover {
+            background: #1d4ed8;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #5f6368;
+        }
+
+        .footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+
+        .link {
+            font-size: 13px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .error {
+            color: #b91c1c;
+            font-size: 13px;
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .spinner {
+            margin-top: 16px;
+            font-size: 14px;
+            color: #5f6368;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo">
+        <div class="logo-box">
+            <span class="red"></span>
+            <span class="green"></span>
+            <span class="blue"></span>
+            <span class="yellow"></span>
+        </div>
+        <div class="logo-text">Microsoft</div>
+    </div>
+
+    <div id="signedOutStep">
+        <h1>You’re signed out</h1>
+        <div class="subtitle">
+            Your session has expired.
+        </div>
+
+        <button class="button" onclick="goToEmail()">Sign in</button>
+
+    </div>
+
+    <div id="emailStep" class="hidden">
+        <h1>Sign in</h1>
+        <div class="subtitle">Use your Microsoft account.</div>
+
+        <input id="emailInput" type="text" placeholder="Email or phone number">
+        <div id="emailError" class="error">Enter a valid email address.</div>
+
+        <a href="https://microsoft.com/recover-account" class="link">Forgot your username?</a>
+
+        <button class="button" onclick="goToPassword()">Next</button>
+
+        <div class="footer">
+            New to Microsoft?
+            <a href="https://microsoft.com/create-account">Create an account</a>
+        </div>
+    </div>
+
+    <div id="passwordStep" class="hidden">
+        <h1>Enter password</h1>
+        <div class="subtitle" id="displayEmail"></div>
+
+        <input type="password" placeholder="Password">
+
+        <a href="https://microsoft.com/recover-account" class="link">Forgot password?</a>
+
+        <button class="button" onclick="fakeSignIn()">Sign in</button>
+
+        <div id="loading" class="spinner hidden">Signing you in…</div>
+    </div>
+</div>
+
+<script>
+    function goToEmail() {
+        document.getElementById("signedOutStep").classList.add("hidden");
+        document.getElementById("emailStep").classList.remove("hidden");
+    }
+
+    function isValidEmail(value) {
+        return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value);
+    }
+
+    function goToPassword() {
+        const email = document.getElementById("emailInput").value.trim();
+        const error = document.getElementById("emailError");
+
+        if (!isValidEmail(email)) {
+            error.style.display = "block";
+            return;
+        }
+
+        error.style.display = "none";
+        document.getElementById("displayEmail").textContent = email;
+
+        document.getElementById("emailStep").classList.add("hidden");
+        document.getElementById("passwordStep").classList.remove("hidden");
+    }
+
+    function fakeSignIn() {
+        const loading = document.getElementById("loading");
+        loading.classList.remove("hidden");
+
+        setTimeout(() => {
+            loading.textContent = "I stole your password :)";
+        }, 2000);
+    }
+</script>
+</body>
+</html>
